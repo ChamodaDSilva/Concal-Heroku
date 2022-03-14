@@ -8,10 +8,17 @@ app = Flask(__name__)
 model = joblib.load('concrete-predicter.joblib')
 
 
-@app.route('/', methods=['POST'])
+@app.route('/', methods=['POST', 'GET'])
 def feedModel():
-    data = request.get_json()
+    print("backend started")
+    newdata = request.get_json('input')
+    print(newdata)
+    newDataArr = newdata['input'].split()
+    data = [
+        [float(newDataArr[0]), float(newDataArr[1]), float(newDataArr[2]), float(newDataArr[3]), float(newDataArr[4]),
+         float(newDataArr[5]), float(newDataArr[6]), float(newDataArr[7])]]
     prediction = np.array2string(model.predict(data)[0])
+    print(prediction)
 
     return jsonify(prediction)
 
